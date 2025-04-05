@@ -1,0 +1,21 @@
+/* In your chart.css or global css */
+:root {
+    --color-january: hsl(var(--chart-1)); /* Or specific hex/hsl values */
+    --color-february: hsl(var(--chart-2));
+    --color-march: hsl(var(--chart-3));
+    --color-april: hsl(var(--chart-4));
+    --color-may: hsl(var(--chart-5));
+  
+    /* Define the base chart colors used by shadcn/ui ChartStyle */
+    --chart-1: 220 80% 60%; /* Example Blue */
+    --chart-2: 160 70% 50%; /* Example Green */
+    --chart-3: 40 80% 60%;  /* Example Orange */
+    --chart-4: 280 75% 65%; /* Example Purple */
+    --chart-5: 0 70% 60%;   /* Example Red */
+  }
+  
+  .dark {
+    /* Optional: Define dark mode colors if needed */
+    --chart-1: 220 70% 70%;
+    /* ... other dark mode colors */
+  }
