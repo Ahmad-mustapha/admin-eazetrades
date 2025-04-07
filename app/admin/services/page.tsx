@@ -7,7 +7,7 @@ import { FiEdit } from 'react-icons/fi'; // Edit Icon
 import { BsTrash } from 'react-icons/bs'; // Trash Icon
 
 // types/product-list.ts (or define within the component file)
-export interface ServiceListItem {
+interface ServiceListItem {
   id: string;
   imageUrl: string;
   name: string;
@@ -18,7 +18,7 @@ export interface ServiceListItem {
 }
 
 
-export const servicesListData: ServiceListItem[] = [
+const servicesListData: ServiceListItem[] = [
   {
     id: 'prod-001',
     imageUrl: '/phone.png', // Replace with your actual image paths
@@ -86,7 +86,7 @@ export const servicesListData: ServiceListItem[] = [
 ];
 
 // Helper function to format currency (Nigerian Naira - NGN)
-export const formatProductPrice = (amount: number): string => {
+const formatProductPrice = (amount: number): string => {
   return new Intl.NumberFormat('en-NG', {
     style: 'currency',
     currency: 'NGN',

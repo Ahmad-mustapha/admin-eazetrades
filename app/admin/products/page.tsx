@@ -7,7 +7,7 @@ import { FiEdit } from 'react-icons/fi'; // Edit Icon
 import { BsTrash } from 'react-icons/bs'; // Trash Icon
 
 // types/product-list.ts (or define within the component file)
-export interface ProductListItem {
+interface ProductListItem {
   id: string;
   imageUrl: string;
   name: string;
@@ -86,7 +86,7 @@ const productsListData: ProductListItem[] = [
 ];
 
 // Helper function to format currency (Nigerian Naira - NGN)
-export const formatProductPrice = (amount: number): string => {
+const formatProductPrice = (amount: number): string => {
   return new Intl.NumberFormat('en-NG', {
     style: 'currency',
     currency: 'NGN',
