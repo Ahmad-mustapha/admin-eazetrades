@@ -25,7 +25,7 @@ const userData = [
 
 const Dashboardstat = () => {
   return (
-    <div>
+    <div className="py-10">
       <div className='flex items-center gap-6 justify-center flex-wrap xl:justify-start xl:flex-nowrap'>
         {userData.map((data) => (
           <div key={data.id} className='min-w-[12rem] lg:min-w-[14rem] xl:w-full flex items-center gap-4 bg-white p-4 rounded-xl'>

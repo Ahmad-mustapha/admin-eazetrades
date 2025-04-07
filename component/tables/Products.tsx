@@ -115,7 +115,7 @@ const ProductTable: React.FC = () => {
                   {/* Container - onMouseLeave still useful to close if mouse moves away after opening */}
                   <div
                     className="inline-block"
-                    onMouseLeave={() => setOpenMenuId(null)} // Optional: Close menu when mouse leaves the area
+                    // onMouseLeave={() => setOpenMenuId(null)} // Optional: Close menu when mouse leaves the area
                    >
                     {/* Action Button - Changed to onClick */}
                     <button
@@ -131,7 +131,7 @@ const ProductTable: React.FC = () => {
                     {/* Conditional Action Menu (remains the same) */}
                     {openMenuId === product.id && (
                       <div
-                        className="origin-top-right absolute right-0 mt-1 w-40 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none z-20 py-1"
+                        className="origin-top-right absolute right-4 mt-1 w-40 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none z-20 py-1"
                         role="menu"
                         aria-orientation="vertical"
                         aria-labelledby={`actions-menu-button-${product.id}`}

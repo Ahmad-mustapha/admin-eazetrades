@@ -5,8 +5,6 @@ import React from 'react';
 import Image from 'next/image'; // Use Next.js Image component for optimization
 import { FiEdit } from 'react-icons/fi'; // Edit Icon
 import { BsTrash } from 'react-icons/bs'; // Trash Icon
-import Link from 'next/link';
-// import Watch from '/phone.png'
 
 // types/product-list.ts (or define within the component file)
 export interface ProductListItem {
@@ -130,7 +128,7 @@ const ProductList: React.FC = () => {
 
   return (
     <div className='pt-10'>
-      <div className="flex justify-end mb-4">
+      <div className="flex md:justify-end mb-4">
         <button
           onClick={handleAddNewProduct}
           className="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-5 py-3 rounded-[100px] transition duration-150 ease-in-out text-sm"
