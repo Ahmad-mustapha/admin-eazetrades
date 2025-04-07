@@ -18,7 +18,7 @@ export interface ProductListItem {
 }
 
 
-export const productsListData: ProductListItem[] = [
+const productsListData: ProductListItem[] = [
   {
     id: 'prod-001',
     imageUrl: '/phone.png', // Replace with your actual image paths
