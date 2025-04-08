@@ -163,7 +163,7 @@ const UsersTable: React.FC = () => {
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
               {usersData.map((user, index) => ( // Added index for potential dynamic positioning if needed
-                <tr key={user.id} className="hover:bg-gray-50 transition duration-150 ease-in-out">
+                <tr key={index} className="hover:bg-gray-50 transition duration-150 ease-in-out">
                   {/* ID */}
                   <td className="px-4 md:px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{user.id}</td>
                    {/* Full Name */}

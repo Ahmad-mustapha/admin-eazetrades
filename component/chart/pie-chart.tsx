@@ -37,7 +37,7 @@ const monthConfig = {
   // may: { label: "May", color: "hsl(120, 90%, 60%)" },
 }
 
-const renderActiveShape = (props: PieSectorDataItem) => {
+const renderActiveShape = (props: any) => {
   const {
     cx, cy, innerRadius, outerRadius = 0, startAngle, endAngle, fill,
   } = props

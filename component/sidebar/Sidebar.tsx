@@ -64,7 +64,7 @@ const Sidebar = () => {
       {/* Navigation List - This part will scroll */}
       {/* flex-grow makes it take available space */}
       {/* overflow-y-auto enables scrolling ONLY for this section */}
-      <nav className="flex-grow overflow-y-auto px-4 py-4">
+      <nav className="flex-grow hover:overflow-y px-4 py-4">
         <ul className="space-y-1"> {/* Using space-y for consistent spacing */}
           {navLinks.map((link) => (
             <li key={link.id}>
