@@ -126,7 +126,7 @@ export function InteractivePieChart() {
         </Select>
       </CardHeader>
 
-      <CardContent className="flex justify-center p-6">
+      <CardContent className="flex justify-center p-0 sm:p-6">
         <div className="h-[300px] w-full">
           <ResponsiveContainer width="100%" height="100%">
             <PieChart>
