@@ -6,6 +6,9 @@ import { CiSearch } from "react-icons/ci";
 import { GoBellFill } from "react-icons/go";
 import { IoIosArrowDown } from "react-icons/io";
 import Image from "next/image";
+import Link from "next/link";
+import Logo from '../../public/sellereazetradelogo.png';
+
 
 const Header = () => {
   const [ openNav, setOpenNav ] = useState(false)
@@ -21,8 +24,22 @@ const Header = () => {
   return (
     <div className="z-50 h-[5rem] bg-white shadow-md fixed w-full top-0 py-6 px-6 sm:px-8 flex items-center justify-between text-[#444444]">
       <div>
-        <p className="text-[24px] font-[500]">Administrator</p>
-        <p>Last login: Jan 01, 1970 12:00 AM</p>
+        <div className="hidden sm:flex flex-col">
+          <p className="text-[24px] font-[500]">Administrator</p>
+          <p>Last login: Jan 01, 1970 12:00 AM</p>
+        </div>
+        <div className="block sm:hidden border-b border-gray-200 bg-white p-4">
+          <Link href="/admin/dashboard">
+            <Image
+              src={Logo}
+              alt="Sellereaze Trade Logo"
+              width={180} // Adjusted width
+              height={50} // Adjusted height for typical logo aspect ratio
+              priority
+              // style={{ width: 'auto', height: 'auto', maxWidth: '180px' }} // Max width for responsiveness
+            />
+          </Link>
+        </div>
       </div>
       <div className="hidden md:flex items-center gap-2 mr-[310px] md:mr-[300px] ">
         <div className="flex items-center gap-2">

@@ -44,7 +44,7 @@ const Sidebar = () => {
   // Removed the outer unnecessary div from previous correction
   // Apply flex column layout, full height, and background directly here
   return (
-    <div className="flex h-full flex-col bg-white"> {/* Main container: full height, flex column */}
+    <div className="hdden md:flex h-full flex-col bg-white"> {/* Main container: full height, flex column */}
 
       {/* Logo Section - Stays at the top */}
       {/* Added border-b for visual separation */}
