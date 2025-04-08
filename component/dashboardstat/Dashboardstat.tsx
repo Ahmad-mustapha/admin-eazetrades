@@ -20,15 +20,15 @@ const userData = [
   { id: 2, title: 'Unverified Users', image: Iconimg, key: 'unverified_users' },
   { id: 3, title: 'Verified Users', image: Iconimg, key: 'verified_users' },
   { id: 4, title: 'Total Staffs', image: Iconimg, key: 'total_staffs' },
-  { id: 5, title: 'Pending', image: Iconimg, key: 'pending_users' }
+  // { id: 5, title: 'Pending', image: Iconimg, key: 'pending_users' }
 ]
 
 const Dashboardstat = () => {
   return (
     <div className="py-10">
-      <div className='flex items-center gap-6 justify-center flex-wrap xl:justify-start xl:flex-nowrap'>
+      <div className='flex items-center gap-6 overflow-x-auto xl:justify-start'>
         {userData.map((data) => (
-          <div key={data.id} className='min-w-[12rem] lg:min-w-[14rem] xl:w-full flex items-center gap-4 bg-white p-4 rounded-xl'>
+          <div key={data.id} className='min-w-[12rem] h-[110px] lg:min-w-[14rem] xl:w-full flex items-center gap-4 bg-white p-4 rounded-xl'>
             <div className='p-2 rounded-xl'
               // style={{
               //   backgroundColor:
