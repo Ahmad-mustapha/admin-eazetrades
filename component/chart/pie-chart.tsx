@@ -2,10 +2,12 @@
 
 import * as React from "react"
 import { PieChart, Pie, Sector, Cell, ResponsiveContainer, Tooltip, Label } from "recharts"
+// Keep original PieSectorDataItem import if needed elsewhere, but not directly used in renderActiveShape fix
 import type { PieSectorDataItem } from "recharts/types/polar/Pie"
 import { TooltipProps } from 'recharts';
 import { NameType, ValueType } from 'recharts/types/component/DefaultTooltipContent';
 
+// Assuming these imports are correct for your project structure
 import {
   Card,
   CardContent,
@@ -37,67 +39,74 @@ const monthConfig = {
   // may: { label: "May", color: "hsl(120, 90%, 60%)" },
 }
 
-const renderActiveShape = (props: any) => {
+// === CORRECTED renderActiveShape Function ===
+const renderActiveShape = (props: any) => { // Using props: any for simplicity here based on previous errors
   const {
     cx, cy, innerRadius, outerRadius = 0, startAngle, endAngle, fill,
-  } = props
+  } = props;
 
-  if (typeof cx !== 'number' || typeof cy !== 'number' || typeof innerRadius !== 'number' || typeof outerRadius !== 'number' || typeof startAngle !== 'number' || typeof endAngle !== 'number') {
-      return null;
+  // Check if required properties are valid numbers
+  const arePropsValid = typeof cx === 'number' &&
+                        typeof cy === 'number' &&
+                        typeof innerRadius === 'number' &&
+                        typeof outerRadius === 'number' &&
+                        typeof startAngle === 'number' &&
+                        typeof endAngle === 'number';
+
+  // If props are NOT valid, return an empty group element instead of null
+  if (!arePropsValid) {
+    return <g />; // <-- Fix: Return empty element, not null
   }
-  const activeOuterRadius = outerRadius + 8
+
+  // Props are valid, proceed with rendering
+  const activeOuterRadius = outerRadius + 8;
   return (
     <g>
-      <Sector cx={cx} cy={cy} innerRadius={innerRadius} outerRadius={activeOuterRadius} startAngle={startAngle} endAngle={endAngle} fill={fill} />
+      <Sector
+        cx={cx}
+        cy={cy}
+        innerRadius={innerRadius}
+        outerRadius={activeOuterRadius}
+        startAngle={startAngle}
+        endAngle={endAngle}
+        fill={fill}
+      />
     </g>
-  )
-}
+  );
+};
+// === End Correction ===
 
-// === STEP 1: Define Custom Tooltip Component ===
+
+// === Custom Tooltip Component (Unchanged) ===
 const CustomTooltip = ({ active, payload, label }: TooltipProps<ValueType, NameType>) => {
-  // Check if the tooltip is active and has data
   if (active && payload && payload.length) {
-    // payload[0].payload contains the original data object for the hovered sector
     const data = payload[0].payload;
-
-    // Ensure data and required properties exist
     if (!data || typeof data.value !== 'number' || typeof data.color !== 'string' || typeof data.name !== 'string') {
         return null;
     }
-
-    // Get the display label from monthConfig (optional, but nice)
     const displayLabel = monthConfig[data.name as keyof typeof monthConfig]?.label ?? data.name;
-
     return (
-      // Use Shadcn/Tailwind classes for styling the tooltip box
       <div className="rounded-lg border bg-background p-2 shadow-sm">
         <div className="flex items-center gap-2">
-          {/* The colored square */}
-          <span
-            className="h-3 w-3 shrink-0 rounded-sm" // shrink-0 prevents shrinking in flex
-            style={{ backgroundColor: data.color }} // Set background to the sector's color
-          />
-          {/* The text content */}
+          <span className="h-3 w-3 shrink-0 rounded-sm" style={{ backgroundColor: data.color }} />
           <div className="flex flex-col">
             <span className="font-medium text-foreground">{displayLabel}</span>
-            <span className="text-sm text-muted-foreground">
-              {`${data.value.toLocaleString()} Visitors`}
-            </span>
+            <span className="text-sm text-muted-foreground">{`${data.value.toLocaleString()} Visitors`}</span>
           </div>
         </div>
       </div>
     );
   }
-
-  // Return null if tooltip is not active or has no payload
   return null;
 };
 
 
+// === Main Chart Component (Unchanged Logic) ===
 export function InteractivePieChart() {
   const [activeIndex, setActiveIndex] = React.useState(0)
   const activeData = desktopData[activeIndex]
 
+  // Original guard clause
   if (!activeData) { return null; }
 
   return (
@@ -121,23 +130,38 @@ export function InteractivePieChart() {
         <div className="h-[300px] w-full">
           <ResponsiveContainer width="100%" height="100%">
             <PieChart>
-              {/* === STEP 2: Use the `content` prop === */}
-              <Tooltip
-                // Pass the custom component reference here
-                content={CustomTooltip}
-                // Cursor styling remains the same
-                cursor={{ fill: 'rgba(200, 200, 200, 0.2)' }}
-              />
-              <Pie 
-              activeIndex={activeIndex} 
-              activeShape={renderActiveShape} 
-              data={desktopData} cx="50%" cy="50%" 
-              innerRadius={80} outerRadius={110} 
-              paddingAngle={1} 
-              dataKey="value" 
-              nameKey="name">
+              <Tooltip content={CustomTooltip} cursor={{ fill: 'rgba(200, 200, 200, 0.2)' }} />
+              <Pie
+                activeIndex={activeIndex}
+                activeShape={renderActiveShape} // Pass the corrected function
+                data={desktopData}
+                cx="50%"
+                cy="50%"
+                innerRadius={80}
+                outerRadius={110}
+                paddingAngle={1}
+                dataKey="value"
+                nameKey="name"
+              >
                 {desktopData.map((entry, index) => (<Cell key={`cell-${index}`} fill={entry.color} stroke={entry.color} strokeWidth={0.5}/>))}
-                <Label content={(props) => { const viewBox = props.viewBox as { cx?: number; cy?: number }; if (!viewBox || typeof viewBox.cx !== 'number' || typeof viewBox.cy !== 'number' || !activeData) { return null; } const { cx, cy } = viewBox; const selectedMonthLabel = monthConfig[activeData.name as keyof typeof monthConfig]?.label ?? activeData.name; return (<g><text x={cx} y={cy} dy="-0.5em" textAnchor="middle" dominantBaseline="middle" className="text-2xl font-bold fill-foreground">{activeData.value.toLocaleString()}</text><text x={cx} y={cy} dy="1.2em" textAnchor="middle" dominantBaseline="middle" className="text-sm fill-muted-foreground">{selectedMonthLabel}</text></g>);}} position="center" />
+                <Label
+                  content={(props) => {
+                    const viewBox = props.viewBox as { cx?: number; cy?: number };
+                    // Guard clause for label content
+                    if (!viewBox || typeof viewBox.cx !== 'number' || typeof viewBox.cy !== 'number' || !activeData) {
+                       return null; // Label can safely return null
+                    }
+                    const { cx, cy } = viewBox;
+                    const selectedMonthLabel = monthConfig[activeData.name as keyof typeof monthConfig]?.label ?? activeData.name;
+                    return (
+                      <g>
+                        <text x={cx} y={cy} dy="-0.5em" textAnchor="middle" dominantBaseline="middle" className="text-2xl font-bold fill-foreground">{activeData.value.toLocaleString()}</text>
+                        <text x={cx} y={cy} dy="1.2em" textAnchor="middle" dominantBaseline="middle" className="text-sm fill-muted-foreground">{selectedMonthLabel}</text>
+                      </g>
+                    );
+                  }}
+                  position="center"
+                />
               </Pie>
             </PieChart>
           </ResponsiveContainer>
