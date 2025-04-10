@@ -115,7 +115,6 @@ const PremiumproductTable: React.FC = () => {
                   {/* Container - onMouseLeave still useful to close if mouse moves away after opening */}
                   <div
                     className="inline-block"
-                    onMouseLeave={() => setOpenMenuId(null)} // Optional: Close menu when mouse leaves the area
                    >
                     {/* Action Button - Changed to onClick */}
                     <button
