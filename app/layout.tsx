@@ -1,5 +1,8 @@
 import { Sidebar, Header } from '../component/index' 
 import '../globals.css'
+import type { ReactElement, ReactNode } from 'react';
+import type { NextPage } from 'next';
+import type { AppProps } from 'next/app';
 
 const Layout = ({ children }: { children: React.ReactNode }) => {
   return (
@@ -18,3 +21,23 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
 }
 
 export default Layout
+
+
+// Define a TypeScript type for pages that might have a getLayout property
+export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
+  getLayout?: (page: ReactElement) => ReactNode;
+};
+
+// Update AppProps to use the new page type
+type AppPropsWithLayout = AppProps & {
+  Component: NextPageWithLayout;
+};
+
+function MyApp({ Component, pageProps }: AppPropsWithLayout) {
+  // Use the layout defined at the page level, if available
+  // Otherwise, wrap the page in the default <Layout> component
+  const getLayout = Component.getLayout ?? ((page) => <Layout>{page}</Layout>);
+
+  // Render the page, potentially wrapped by its specific layout or the default one
+  return getLayout(<Component {...pageProps} />);
+}

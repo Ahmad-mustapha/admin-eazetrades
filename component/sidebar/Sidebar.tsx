@@ -90,13 +90,13 @@ const Sidebar = () => {
       {/* Logout Button - Stays at the bottom */}
       {/* Added border-t for visual separation */}
       <div className="mt-auto border-t border-gray-200 p-4"> {/* mt-auto is redundant due to flex-grow on nav, but doesn't hurt */}
-         <Link
-            href='/admin/logout'
-            className="group flex w-full items-center gap-3 rounded-md px-3 py-2.5 text-sm font-medium text-red-600 hover:bg-red-50 hover:text-red-700"
+         <button
+            // href='/admin/logout'
+            className="group flex w-full items-center gap-3 rounded-md px-3 py-2.5 text-sm font-medium cursor-pointer text-red-600 hover:bg-red-50 hover:text-red-700"
          >
             <BiLogOut size={20} className="text-red-500 group-hover:text-red-600" />
             Log out
-         </Link>
+         </button>
       </div>
     </div>
   );

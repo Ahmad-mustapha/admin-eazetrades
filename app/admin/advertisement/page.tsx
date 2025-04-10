@@ -3,67 +3,75 @@
 
 import React, { useState, useCallback } from 'react';
 
-// Ad Type components & types
+// Ad Type
 import AdTypeCard, { AdType } from '../../../component/adsandpromotion/adtypes/Adtype';
 import EditAdTypePanel, { EditMode as AdTypeEditMode } from '../../../component/adsandpromotion/adtypes/EditAdTypesPanel';
 
-// Promotion Power components & types
-import EditPromotionPowerPanel, { EditMode as PromoPowerEditMode } from '../../../component/adsandpromotion/promotionpower/EditPromotionPowerPanel';
+// Promotion Power
 import PromotionPowerCard, { PromotionPower }  from '../../../component/adsandpromotion/promotionpower/Promotionpower';
+import EditPromotionPowerPanel, { EditMode as PromoPowerEditMode } from '../../../component/adsandpromotion/promotionpower/EditPromotionPowerPanel';
+
+// Duration
+import DurationCard, { DurationOption } from '../../../component/adsandpromotion/duration/Duration';
+import EditDurationPanel, { EditMode as DurationEditMode } from '../../../component/adsandpromotion/duration/Editduration';
+
+// === Import Ad Show Components ===
+import EditAdShowPanel, { EditMode as AdShowEditMode } from '../../../component/adsandpromotion/adshow/Editadshow'; // Updated Import
+import AdShowCard, { AdShowOption } from '../../../component/adsandpromotion/adshow/Adshow'; // Updated Import
+// === End Import ===
 
 
-// --- Define a more structured type for panel context ---
-// This maps the 'type' string to the specific data item and edit mode type
+// --- Updated ActivePanel Type ---
 type PanelContextMap = {
   adType: { type: 'adType'; mode: AdTypeEditMode; item: AdType | null };
   promoPower: { type: 'promoPower'; mode: PromoPowerEditMode; item: PromotionPower | null };
-  // Add entries for duration, audience etc. when needed
-  // duration: { type: 'duration'; mode: SomeEditMode; item: DurationOption | null };
+  duration: { type: 'duration'; mode: DurationEditMode; item: DurationOption | null };
+  adShow: { type: 'adShow'; mode: AdShowEditMode; item: AdShowOption | null }; // Added adShow
 };
-
-// Extract the possible string types ('adType', 'promoPower')
 type PanelType = keyof PanelContextMap;
-
-// The activePanel state can be one of the value types from the map, or null
 type ActivePanel = PanelContextMap[PanelType] | null;
 // --- End Type Definitions ---
 
 
 const Advertisement = () => {
-  // --- State for Active Panel (Uses the new ActivePanel type) ---
+  // --- State for Active Panel ---
   const [activePanel, setActivePanel] = useState<ActivePanel>(null);
 
   // --- State for Refreshing Data ---
   const [adTypeRefreshKey, setAdTypeRefreshKey] = useState(0);
   const [promoPowerRefreshKey, setPromoPowerRefreshKey] = useState(0);
-  // Add more refresh keys...
+  const [durationRefreshKey, setDurationRefreshKey] = useState(0);
+  const [adShowRefreshKey, setAdShowRefreshKey] = useState(0); // Added adShow key
 
-  // --- Corrected Panel Control Handlers ---
-  // Use generics to strongly type the relationship between type string and item/mode
+  // --- Panel Control Handlers (Generic handler remains the same) ---
   const handleOpenPanel = useCallback(<T extends PanelType>(
-    type: T,                                  // Type is one of 'adType', 'promoPower'
-    mode: PanelContextMap[T]['mode'],         // Mode type depends on T
-    item: PanelContextMap[T]['item']          // Item type depends on T
+    type: T,
+    mode: PanelContextMap[T]['mode'],
+    item: PanelContextMap[T]['item']
   ) => {
     console.log(`Opening panel: type=${type}, mode=${mode}, item=`, item);
-    // Construct the state object matching the ActivePanel type union
-    setActivePanel({ type, mode, item } as ActivePanel); // Use assertion to fit union type
-  }, []); // No dependencies needed
+    // This type assertion is necessary because TypeScript can't perfectly infer
+    // the correlation between type, mode, and item within this generic function.
+    setActivePanel({ type, mode, item } as ActivePanel);
+  }, []);
 
   const handleClosePanel = useCallback(() => {
     console.log("Closing panel");
     setActivePanel(null);
   }, []);
 
-  // --- Save Success Handler ---
-  const handleSaveSuccess = useCallback((savedType: PanelType) => { // Use PanelType
+  // --- Updated Save Success Handler ---
+  const handleSaveSuccess = useCallback((savedType: PanelType) => {
     console.log(`${savedType} saved successfully, incrementing refresh key.`);
     if (savedType === 'adType') {
         setAdTypeRefreshKey(prevKey => prevKey + 1);
     } else if (savedType === 'promoPower') {
         setPromoPowerRefreshKey(prevKey => prevKey + 1);
+    } else if (savedType === 'duration') {
+        setDurationRefreshKey(prevKey => prevKey + 1);
+    } else if (savedType === 'adShow') { // Added adShow case
+        setAdShowRefreshKey(prevKey => prevKey + 1);
     }
-    // Add else if for other types...
   }, []);
 
 
@@ -72,44 +80,71 @@ const Advertisement = () => {
         <div className="p-4 md:p-6 lg:p-8">
             <h1 className="mb-6 text-2xl font-bold text-gray-900">Advertisement Settings</h1>
 
-             {/* Ad Type Section - Ensure types passed match handleOpenPanel */}
-            <AdTypeCard
-                onAddRequest={() => handleOpenPanel('adType', 'add', null)}
-                onEditRequest={(item: AdType) => handleOpenPanel('adType', 'edit', item)}
-                refreshKey={adTypeRefreshKey}
-            />
+            {/* Using flex column for cards now */}
+            <div className="flex flex-col space-y-6"> {/* Added space-y for gap */}
+                {/* Ad Type Section */}
+                <AdTypeCard
+                    onAddRequest={() => handleOpenPanel('adType', 'add', null)}
+                    onEditRequest={(item: AdType) => handleOpenPanel('adType', 'edit', item)}
+                    refreshKey={adTypeRefreshKey}
+                />
 
-             {/* Promotion Power Section - Ensure types passed match handleOpenPanel */}
-             <PromotionPowerCard
-                onAddRequest={() => handleOpenPanel('promoPower', 'add', null)}
-                onEditRequest={(item: PromotionPower) => handleOpenPanel('promoPower', 'edit', item)}
-                refreshKey={promoPowerRefreshKey}
-             />
+                 {/* Promotion Power Section */}
+                 <PromotionPowerCard
+                    onAddRequest={() => handleOpenPanel('promoPower', 'add', null)}
+                    onEditRequest={(item: PromotionPower) => handleOpenPanel('promoPower', 'edit', item)}
+                    refreshKey={promoPowerRefreshKey}
+                 />
 
-            {/* --- Placeholder for other sections --- */}
+                 {/* Duration Section */}
+                 <DurationCard
+                    onAddRequest={() => handleOpenPanel('duration', 'add', null)}
+                    onEditRequest={(item: DurationOption) => handleOpenPanel('duration', 'edit', item)}
+                    refreshKey={durationRefreshKey}
+                 />
+
+                 {/* === Ad Show Section === */}
+                 <AdShowCard
+                    onAddRequest={() => handleOpenPanel('adShow', 'add', null)}
+                    onEditRequest={(item: AdShowOption) => handleOpenPanel('adShow', 'edit', item)}
+                    refreshKey={adShowRefreshKey}
+                 />
+                 {/* === End Ad Show Section === */}
+             </div>
 
         </div>
 
-        {/* Render the Correct Side Panel Conditionally */}
-        {/* AdType Panel */}
+        {/* Render Panels Conditionally */}
         <EditAdTypePanel
             isOpen={activePanel?.type === 'adType'}
             onClose={handleClosePanel}
             mode={activePanel?.type === 'adType' ? activePanel.mode : 'add'}
             initialData={activePanel?.type === 'adType' ? activePanel.item : null}
-            onSaveSuccess={() => handleSaveSuccess('adType')} // Pass the correct type string
+            onSaveSuccess={() => handleSaveSuccess('adType')}
         />
-
-        {/* Promotion Power Panel */}
         <EditPromotionPowerPanel
             isOpen={activePanel?.type === 'promoPower'}
             onClose={handleClosePanel}
             mode={activePanel?.type === 'promoPower' ? activePanel.mode : 'add'}
             initialData={activePanel?.type === 'promoPower' ? activePanel.item : null}
-            onSaveSuccess={() => handleSaveSuccess('promoPower')} // Pass the correct type string
+            onSaveSuccess={() => handleSaveSuccess('promoPower')}
         />
-
-        {/* Add panels for Duration, Audience etc. here */}
+        <EditDurationPanel
+            isOpen={activePanel?.type === 'duration'}
+            onClose={handleClosePanel}
+            mode={activePanel?.type === 'duration' ? activePanel.mode : 'add'}
+            initialData={activePanel?.type === 'duration' ? activePanel.item : null}
+            onSaveSuccess={() => handleSaveSuccess('duration')}
+        />
+        {/* === Ad Show Panel === */}
+        <EditAdShowPanel
+            isOpen={activePanel?.type === 'adShow'}
+            onClose={handleClosePanel}
+            mode={activePanel?.type === 'adShow' ? activePanel.mode : 'add'}
+            initialData={activePanel?.type === 'adShow' ? activePanel.item : null}
+            onSaveSuccess={() => handleSaveSuccess('adShow')}
+        />
+        {/* === End Ad Show Panel === */}
 
     </div>
   );
